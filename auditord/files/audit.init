@@ -1,0 +1,23 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+
+START=99
+STOP=15
+
+restart() {
+    stop 
+    start 
+}
+
+stop() {          
+    echo "/bin/auditord stop"
+    killall -9 auditord
+    iptables -t nat -D PREROUTING -s 0.0.0.0/0.0.0.0 -p tcp --dport 80 -j REDIRECT --to-ports 8118
+}
+
+start() {
+	echo "/bin/auditord start"
+	/bin/auditord &
+	iptables -t nat -A PREROUTING -s 0.0.0.0/0.0.0.0 -p tcp --dport 80 -j REDIRECT --to-ports 8118
+}
+

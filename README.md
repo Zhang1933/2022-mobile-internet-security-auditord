@@ -1,4 +1,4 @@
-#  路由器内核后门实验
+#  路由器后门实验
 
 ## 实验要求:
 
@@ -14,10 +14,15 @@
 * 一个linux操作系统:Ubuntu 20.04.4 LTS
 * openwrt固件选择:
     根据官网:
-    >* Firmware OpenWrt Install / Upgrade URL :!: comes with GUI / LuCI pre-installed, ready to go. 意识就是Install / Upgrade版有GUI/LuCI.
-    >* Firmware OpenWrt snapshot Install / Upgrade URL  :!: No GUI / LuCI pre-installed; LuCI needs to be installed manually ! 意思就是snapshot版没有GUI/LuCI。
+    >* Firmware OpenWrt Install / Upgrade URL :!: comes with GUI / LuCI pre-installed, ready to go. 
 
-    所以就选了`openwrt-21.02.2-ramips-mt7620-phicomm_psg1218a-squashfs-sysupgrade.bin`
+    意思就是Install / Upgrade版有GUI/LuCI.
+
+    >* Firmware OpenWrt snapshot Install / Upgrade URL  :!: No GUI / LuCI pre-installed; LuCI needs to be installed manually ! 
+
+    意思就是snapshot版没有GUI/LuCI。
+
+所以就选了`openwrt-21.02.2-ramips-mt7620-phicomm_psg1218a-squashfs-sysupgrade.bin`
 
 * 一根网线连接路由器和电脑。
 
@@ -409,6 +414,9 @@ s|</head>|<script> window.alert("You have been hacked!");</script>$0|
 ```
 
 然后添加iptables规则：
+
+当数据包目的端口为80端口时，重定向到8118端口，也就是privoxy程序所监听的端口。
+
 ```
 iptables -t nat -A PREROUTING -s 0.0.0.0/0.0.0.0 -p tcp --dport 80 -j REDIRECT --to-ports 8118
 ```

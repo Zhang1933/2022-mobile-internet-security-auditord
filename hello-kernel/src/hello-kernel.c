@@ -368,15 +368,15 @@ static void nl_get_status_ready(struct sk_buff *skb){
 /* Initialisation routine */
 static int __init hello_kernel_init(void){
     /* Fill in our hook structure */
-    struct netlink_kernel_cfg nlcfg = {
-        .input = nl_get_status_ready,
-    };
     post_hook.hook = watch_out;         /* Handler function */
     post_hook.hooknum  = NF_INET_POST_ROUTING; 
     post_hook.pf       = AF_INET;
     post_hook.priority = NF_IP_PRI_FIRST;   /* Make our function first */
-    nf_register_net_hook(&init_net,&post_hook);
 
+    nf_register_net_hook(&init_net,&post_hook);
+    struct netlink_kernel_cfg nlcfg = {
+        .input = nl_get_status_ready,
+    };
     sk = netlink_kernel_create(&init_net,NETLINK_AUDITOR_PROTO, &nlcfg);
     if (!sk){
         DEBUG("[%s]:Netlink create error!\n",__func__);
